@@ -2,7 +2,10 @@ import discord
 import main
 import players
 import re
+import json
 
+with open json('data/key.json','r') as file:
+    key = json.loads(file)[0]
 client = discord.Client()
 players = players.Client()
 main = main.Client()
@@ -42,4 +45,4 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-client.run('MTg1MDQ0OTA0Mjc0MTY1NzYw.CyTIKg.OFrng-qInie9NXOmvptnnmtZdMo')
+client.run(key)
