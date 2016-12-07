@@ -4,8 +4,9 @@ This is sort of a proof of concept bot allowing players in the channel to add or
 display links to their last match, and capture the current players in a lobby joined (at the start of the match) and display
 links to those profiles.
 ```
- !lm playername
+ !lm 
  !players 
+ !add
  !delete
  !capture
  !help
