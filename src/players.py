@@ -32,6 +32,7 @@ class Client():
 
     def set(self, alias, playerid):
         ''' Sets the alias (name) for the provided playerid; also used to add players '''
+        alias = alias.lower()
         self.players[alias] = playerid
         self.save()
         return 'Player added.'
@@ -56,5 +57,5 @@ class Client():
         
     def getid(self, player):
         ''' Returns player id from alias '''
-        return self.players.get(player)
+        return self.players.get(player.lower())
         
