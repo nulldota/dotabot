@@ -49,12 +49,13 @@ async def on_message(message):
             resp = '!lm playername\n!players\n!delete playername\n!add playername accountid\n!help'
         
         # Captures playerlist from server_log and displays links to dotabuff
-        if data[0] == '!capture':
-            resp = 'Stopped listening for matches'
-            await client.send_message(message.channel, 'Started listening for matches')
+        if data[0] == '!get':
             await client.send_message(message.channel, main.run())
 
+        
         await client.send_message(message.channel, resp)
+        
+        
 
 
 
