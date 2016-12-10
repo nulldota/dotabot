@@ -50,6 +50,7 @@ async def on_message(message):
         
         # Captures playerlist from server_log and displays links to dotabuff
         if data[0] == '!get':
+            await client.send_message(message.channel, 'Acquiring match data')
             await client.send_message(message.channel, main.run())
 
         

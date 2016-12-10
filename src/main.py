@@ -2,6 +2,11 @@ import dota2api
 import json
 import re
 
+
+# Make this return separate response for radiant and dire
+# Lookup function for acronyms
+
+
 class start():
     def __init__(self):
         with open('data/key.json','r') as file:
@@ -13,13 +18,14 @@ class start():
     # Return dict of player ids : player names from live match
 
     def get_players(self):
-        with open(self.location,'r') as file:
-            data = file.read().split()
+        with open(self.location,'r') as fd:
+            data = fd.read().split()
         data.reverse()
         for i in range(len(data)):
             if r'9:[U:1:' in data[i]:
                 datastr = ''.join(data[i:i+10])
                 return re.findall(r'[0-9]{8,9}',datastr) 
+                
 
     # Return hyperlink to dotabuff profile of playerid
     def get_dotabuff(self, playerid):
@@ -30,18 +36,18 @@ class start():
             # Format string resp
             resp = '[' + data['players'][0]['personaname'] + ']'
             resp += '(http://www.dotabuff.com/players/' + str(playerid) + ')\n```'
-            for n in range(3): # n matches
+            for n in range(5): # n matches
                 match = self.api.get_match_details(history['matches'][n]['match_id'])
                 for i in range(len(match['players'])):
                     if match['players'][i]['account_id'] == int(playerid):
                         slot = match['players'][i]
                         if match['radiant_win'] != (i > 4):
-                            resp += '[W]   '
+                            resp += '[W] '
                         else:
-                            resp += '[L]   '
-                        resp += '[' + self.resolvehero(slot['hero_id']) + ']\t'
-                        resp += '[GPM: ' + str(slot['gold_per_min']) + '] [XPM: ' + str(slot['xp_per_min']) + ']\t'
-                        resp += '[K: ' + str(slot['kills']) + '] [D: ' + str(slot['deaths']) + '] [A: ' + str(slot['assists']) + ']\n'
+                            resp += '[L] '
+                        resp += '[' + self.resolvehero(slot['hero_id']) + '] '
+                        resp += '[' + str(slot['gold_per_min']) + ':' + str(slot['xp_per_min']) + '] '
+                        resp += '[' + str(slot['kills']) + ':' + str(slot['deaths']) + ':' + str(slot['assists']) + ']\n'
             resp += '```'
             return resp
         except dota2api.src.exceptions.APIError:
@@ -73,4 +79,3 @@ class start():
 if __name__ == '__main__':
     s = start()
     print(s.run())
-    
