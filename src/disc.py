@@ -1,4 +1,4 @@
-import discord, re, json
+import discord, re, json, time
 import main, players
 
 with open('data/key.json','r') as file:
@@ -46,12 +46,14 @@ async def on_message(message):
 
         # lists commands
         if data[0] == '!help':
-            resp = '!lm playername\n!players\n!delete playername\n!add playername accountid\n!help'
+            resp = '!lm\n!players\n!delete playername\n!add accountid (players add themselves)\n!help'
         
         # Captures playerlist from server_log and displays links to dotabuff
         if data[0] == '!get':
+            init = time.time()
             await client.send_message(message.channel, 'Acquiring match data')
             await client.send_message(message.channel, main.run())
+            resp = 'Response time: {:.2f}s'.format(time.time() - init)
 
         
         await client.send_message(message.channel, resp)

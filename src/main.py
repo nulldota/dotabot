@@ -34,21 +34,25 @@ class start():
         try:
             history = self.api.get_match_history(account_id=int(playerid))
             # Format string resp
-            resp = '[' + data['players'][0]['personaname'] + ']'
-            resp += '(http://www.dotabuff.com/players/' + str(playerid) + ')\n```'
+            name = data['players'][0]['personaname']
+            url = 'http://www.dotabuff.com/players/' + str(playerid)
+            resp = '[{0}] ({1})\n```'.format(name, url)
             for n in range(5): # n matches
                 match = self.api.get_match_details(history['matches'][n]['match_id'])
                 for i in range(len(match['players'])):
                     if match['players'][i]['account_id'] == int(playerid):
                         slot = match['players'][i]
+                        win = 'L'
                         if match['radiant_win'] != (i > 4):
-                            resp += '[W] '
-                        else:
-                            resp += '[L] '
-                        resp += '[' + self.resolvehero(slot['hero_id']) + '] '
-                        resp += '[' + str(slot['gold_per_min']) + ':' + str(slot['xp_per_min']) + '] '
-                        resp += '[' + str(slot['kills']) + ':' + str(slot['deaths']) + ':' + str(slot['assists']) + ']\n'
-            resp += '```'
+                            win = 'W'
+                        hero = '[{0}]'.format(self.resolvehero(slot['hero_id'])[0:16])
+                        gpm = int(slot['gold_per_min'])
+                        xpm = int(slot['xp_per_min'])
+                        k = slot['kills']
+                        d = slot['deaths']
+                        a = slot['assists']
+                        resp += '[{0}] {1:18s} [{2}:{3}] [{4:02d}:{5:02d}:{6:02d}]\n'.format(win, hero, gpm, xpm, k, d, a)
+            resp += '```\n'
             return resp
         except dota2api.src.exceptions.APIError:
             return ''
